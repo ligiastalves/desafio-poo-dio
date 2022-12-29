@@ -1,3 +1,4 @@
+import desafio.dominio.Conteudos;
 import desafio.dominio.Curso;
 import desafio.dominio.Mentoria;
 
@@ -17,6 +18,9 @@ public class Main {
 
         System.out.println(curso1);
         System.out.println(curso2);
+
+        //Conteudos conteudo = new Curso();
+        //Conteudos conteudo2 = new Mentoria();
 
         Mentoria mentoria1 = new Mentoria();
         mentoria1.setTitulo("Mentoria de Java");
