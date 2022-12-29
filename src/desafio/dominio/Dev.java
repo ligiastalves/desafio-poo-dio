@@ -2,24 +2,35 @@ package desafio.dominio;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 public class Dev {
 
     private String nome;
-    private Set<Conteudos> conteudosInscricao = new LinkedHashSet<>();
+    private Set<Conteudos> conteudosInscritos = new LinkedHashSet<>();
     private Set<Conteudos> conteudosConcluidos = new LinkedHashSet<>();
 
-    public void InscreverBootcamp(Bootcamp bootcamp){
-
+    public void inscreverBootcamp(Bootcamp bootcamp){
+        this.conteudosInscritos.addAll(bootcamp.getConteudos());
+        bootcamp.getDevsInscritos().add(this);
     }
 
     public void progredir(){
-
+        Optional<Conteudos> conteudo = this.conteudosInscritos.stream().findFirst();
+        if(conteudo.isPresent()){
+            this.conteudosConcluidos.add(conteudo.get());
+            this.conteudosInscritos.remove(conteudo.get());
+        }else{
+            System.out.println("Voce não está matriculado em nenhum conteudo!");
+        }
     }
 
-    public void calcularTotalXp(){
-
+    public double calcularTotalXp(){
+        return this.conteudosConcluidos
+                .stream()
+                .mapToDouble(Conteudos::calcularXp)
+                .sum();
     }
 
     public String getNome() {
@@ -30,12 +41,12 @@ public class Dev {
         this.nome = nome;
     }
 
-    public Set<Conteudos> getConteudosInscricao() {
-        return conteudosInscricao;
+    public Set<Conteudos> getconteudosInscritos() {
+        return conteudosInscritos;
     }
 
-    public void setConteudosInscricao(Set<Conteudos> conteudosInscricao) {
-        this.conteudosInscricao = conteudosInscricao;
+    public void setconteudosInscritos(Set<Conteudos> conteudosInscritos) {
+        this.conteudosInscritos = conteudosInscritos;
     }
 
     public Set<Conteudos> getConteudosConcluidos() {
@@ -51,11 +62,11 @@ public class Dev {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Dev dev = (Dev) o;
-        return Objects.equals(nome, dev.nome) && Objects.equals(conteudosInscricao, dev.conteudosInscricao) && Objects.equals(conteudosConcluidos, dev.conteudosConcluidos);
+        return Objects.equals(nome, dev.nome) && Objects.equals(conteudosInscritos, dev.conteudosInscritos) && Objects.equals(conteudosConcluidos, dev.conteudosConcluidos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nome, conteudosInscricao, conteudosConcluidos);
+        return Objects.hash(nome, conteudosInscritos, conteudosConcluidos);
     }
 }
